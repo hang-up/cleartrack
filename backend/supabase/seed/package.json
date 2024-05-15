@@ -6,7 +6,7 @@
   "scripts": {
     "setup": "npx @snaplet/seed init",
     "sync": "npx @snaplet/seed sync",
-    "seed": "npx --yes tsx seed.mts >> ../seed.sql"
+    "seed": "npx --yes --verbose tsx seed.mts >> ../seed.sql"
   },
   "author": "",
   "license": "ISC",
