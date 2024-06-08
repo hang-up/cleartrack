@@ -2,6 +2,7 @@
 require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
+  ignores: ["./src/assets/styles/BasPreset/"],
   root: true,
   'extends': [
     'plugin:vue/vue3-essential',
