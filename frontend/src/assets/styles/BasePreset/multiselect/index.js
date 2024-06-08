@@ -467,7 +467,7 @@ export default {
         ]
     },
     filtercontainer: {
-        class: 'relative'
+        class: 'relative w-full'
     },
     filterinput: {
         class: [
