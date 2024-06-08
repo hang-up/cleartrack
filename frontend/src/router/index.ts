@@ -38,10 +38,22 @@ const router = createRouter({
       ]
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
-    }
+      path: '/resources',
+      name: 'resources',
+      redirect: { name: 'resources-list' },
+      component: {
+        render() {
+          return h(resolveComponent('router-view'))
+        }
+      },
+      children: [
+        {
+          path: '',
+          name: 'resources-list',
+          component: () => import('../views/ResourcesView.vue')
+        }
+      ]
+    },
   ]
 })
 
