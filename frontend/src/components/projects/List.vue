@@ -1,50 +1,75 @@
 <template>
-<table class="min-w-full divide-y divide-gray-300">
-            <thead>
-              <tr>
-                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Start</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">End</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Committee Presentation Date</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Publication Date</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
-                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                  <span class="sr-only">Edit</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr v-for="project in projects" :key="project.id">
-                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ project.name }}</td>
-                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                  {{ project.description.split(' ').slice(0, 20).join(' ') }}...
-                </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ project.start_date }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ project.end_date }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ project.committee_presentation_date }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ project.publication_date }}</td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><CommonBadge severity="gray" :text="project.type"/></td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><CommonBadge :severity="getProjectStatusBadge(project.status)" :text="project.status" /></td>
-                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                  <a href="#" class="text-slate-600 hover:text-slate-900"
-                    >Edit<span class="sr-only">, {{ project.name }}</span></a
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
+  <table class="min-w-full divide-y divide-gray-300">
+    <thead>
+      <tr>
+        <th
+          scope="col"
+          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+        >
+          Name
+        </th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Description
+        </th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Start</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">End</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Committee Presentation Date
+        </th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Publication Date
+        </th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+          Status
+        </th>
+        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+          <span class="sr-only">Edit</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <tr v-for="project in projects" :key="project.id">
+        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+          {{ project.name }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+          {{ project.description.split(' ').slice(0, 20).join(' ') }}...
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ project.start_date }}</td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ project.end_date }}</td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+          {{ project.committee_presentation_date }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+          {{ project.publication_date }}
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+          <CommonBadge severity="gray" :text="project.type" />
+        </td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+          <CommonBadge :severity="getProjectStatusBadge(project.status)" :text="project.status" />
+        </td>
+        <td
+          class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+        >
+          <a href="#" class="text-slate-600 hover:text-slate-900"
+            >Edit<span class="sr-only">, {{ project.name }}</span></a
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import CommonBadge from "@/components/common/Badge.vue"
-import { ProjectStatus } from '@/types/project-status';
-import {useProjects} from '@/composables/use-projects'
+import CommonBadge from '@/components/common/Badge.vue'
+import { ProjectStatus } from '@/types/project-status'
+import { useProjects } from '@/composables/use-projects'
 
 const List = defineComponent({
-  name: "ProjectsList",
+  name: 'ProjectsList',
   components: {
     CommonBadge
   },
@@ -148,17 +173,16 @@ const List = defineComponent({
         publication_date: '2021-12-15',
         type: 'Research',
         status: ProjectStatus.not_started
-      },
+      }
     ]
-    const {getProjectStatusBadge} = useProjects()
+    const { getProjectStatusBadge } = useProjects()
 
     return {
       getProjectStatusBadge,
       projects
-    };
+    }
   }
 })
 
 export default List
-
 </script>

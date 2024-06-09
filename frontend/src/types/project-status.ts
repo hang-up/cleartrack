@@ -10,4 +10,4 @@ enum ProjectStatus {
   not_started = 'Not Started'
 }
 
-export { ProjectStatus}
+export { ProjectStatus }

@@ -1,4 +1,4 @@
-import {h, resolveComponent} from 'vue'
+import { h, resolveComponent } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
@@ -29,7 +29,7 @@ const router = createRouter({
           path: 'new',
           name: 'new-project',
           component: () => import('../components/projects/Form.vue')
-        },
+        }
         // {
         //   path: ':id',
         //   name: 'project',
@@ -53,7 +53,7 @@ const router = createRouter({
           component: () => import('../views/ResourcesView.vue')
         }
       ]
-    },
+    }
   ]
 })
 

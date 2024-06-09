@@ -1,16 +1,16 @@
-import { useSupabase } from './use-supabase';
+import { useSupabase } from './use-supabase'
 
 const useResources = () => {
   const getAll = async () => {
-    const supabase = useSupabase();
-    const { data, error } = await supabase.from('resources').select('*');
+    const supabase = useSupabase()
+    const { data, error } = await supabase.from('resources').select('*')
     if (error) {
-      throw new Error(error.message);
+      throw new Error(error.message)
     }
-    return data;
+    return data
   }
 
   return { getAll }
 }
 
-export { useResources}
+export { useResources }
