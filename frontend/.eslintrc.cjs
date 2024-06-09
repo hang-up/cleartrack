@@ -20,5 +20,5 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest'
   },
-  ignorePatterns: ['node_modules', 'dist', 'public', 'src/assets/styles/BasePreset']
+  ignorePatterns: ['node_modules', 'dist', 'public', 'src/assets/styles/base-aura-preset']
 }

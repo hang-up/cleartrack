@@ -18,7 +18,14 @@
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-          <ProjectsList />
+          <TabView class="tabview">
+            <TabPanel header="Gantt Chart">
+              <p class="m-0">Gantt chart</p>
+            </TabPanel>
+            <TabPanel header="List View">
+              <ProjectsList />
+            </TabPanel>
+          </TabView>
         </div>
       </div>
     </div>
@@ -27,12 +34,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import TabView from 'primevue/tabview'
+import TabPanel from 'primevue/tabpanel'
 import ProjectsList from '@/components/projects/List.vue'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'ProjectsView',
   components: {
+    TabView,
+    TabPanel,
     ProjectsList
   },
   setup() {
@@ -44,3 +55,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+::v-deep .tabview [data-p-active='true'] a {
+  border-bottom: 2px solid #3b82f6;
+}
+</style>
