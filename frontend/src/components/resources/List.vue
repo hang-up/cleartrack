@@ -45,13 +45,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import CommonBadge from '@/components/common/Badge.vue'
 
 const List = defineComponent({
-  name: 'ProjectsList',
-  components: {
-    CommonBadge
-  },
+  name: 'ResourcesList',
   setup() {
     const resources = [
       {

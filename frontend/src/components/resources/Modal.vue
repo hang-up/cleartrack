@@ -1,5 +1,5 @@
 <template>
-  <Dialog
+  <PDialog
     v-model:visible="isVisible"
     modal
     header="Create resource"
@@ -19,21 +19,21 @@
       <PButton type="button" label="Cancel" severity="secondary" @click="handleClose"></PButton>
       <PButton type="button" label="Save" @click="handleClose"></PButton>
     </div>
-  </Dialog>
+  </PDialog>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import PButton from 'primevue/button'
-import Dialog from 'primevue/dialog'
+import PDialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 
 const Modal = defineComponent({
   emits: ['close'],
-  name: 'Modal',
+  name: 'NewResourceModal',
   components: {
     PButton,
-    Dialog,
+    PDialog,
     InputText
   },
   props: {

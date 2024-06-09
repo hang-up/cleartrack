@@ -2,13 +2,14 @@
 require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
-  ignores: ['./src/assets/styles/BasPreset/'],
   root: true,
   extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/eslint-config-typescript',
-    '@vue/eslint-config-prettier/skip-formatting'
+    '@vue/eslint-config-prettier'
+    // Read https://github.com/vuejs/eslint-config-prettier?tab=readme-ov-file#use-separate-commands-for-linting-and-formatting
+    // '@vue/eslint-config-prettier/skip-formatting'
   ],
   overrides: [
     {
@@ -18,5 +19,6 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  }
+  },
+  ignorePatterns: ['node_modules', 'dist', 'public', 'src/assets/styles/BasePreset']
 }

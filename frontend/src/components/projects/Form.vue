@@ -67,7 +67,7 @@
             <div class="col-span-full">
               <label class="block text-sm font-medium leading-6 text-gray-900">Description</label>
               <div class="mt-2">
-                <Textarea v-model="description" class="w-full" rows="5" />
+                <TextArea v-model="description" class="w-full" rows="5" />
               </div>
             </div>
 
@@ -240,14 +240,9 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import {
-  PhotoIcon,
-  UserCircleIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon
-} from '@heroicons/vue/24/solid'
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/vue/24/solid'
 import InputText from 'primevue/inputtext'
-import Textarea from 'primevue/textarea'
+import TextArea from 'primevue/textarea'
 import Calendar from 'primevue/calendar'
 import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
@@ -262,13 +257,11 @@ export default defineComponent({
   name: 'NewProjectForm',
   components: {
     CommonBadge,
-    PhotoIcon,
-    UserCircleIcon,
     ChevronRightIcon,
     ChevronLeftIcon,
     InputText,
     MultiSelect,
-    Textarea,
+    TextArea,
     Calendar,
     Dropdown,
     ResourceModal
