@@ -24,7 +24,7 @@ const useProjects = () => {
     if (error) {
       throw new Error(error.message);
     }
-    return data;
+    return data.sort((a: any, b: any) => a.name.localeCompare(b.name));
   };
 
 

@@ -146,9 +146,8 @@
               <div class="flex justify-between">
                 <MultiSelect class="w-10/12" v-model="selectedResources" :options="availableResources" filter optionLabel="name" display="chip" placeholder="Select Resources"
                />
-               <button type="button" class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600">Create new</button>
+               <button type="button" class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600" @click="createResource">Create new</button>
               </div>
-
             </div>
           </div>
 
@@ -163,6 +162,7 @@
       <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
     </div>
   </form>
+  <ResourceModal :visible="isResourceModalVisible" @close="(e:boolean) => isResourceModalVisible = e"></ResourceModal>
   </div>
 </template>
 
@@ -175,10 +175,12 @@ import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect';
 import CommonBadge from "@/components/common/Badge.vue"
+import ResourceModal from "@/components/resources/Modal.vue"
 
 import { ProjectStatus } from '@/types/project-status';
 import {useProjects} from '@/composables/use-projects'
 import { useResources } from '@/composables/use-resources';
+
 
 export default defineComponent({
   name: 'NewProjectForm',
@@ -192,7 +194,8 @@ export default defineComponent({
     MultiSelect,
     Textarea,
     Calendar,
-    Dropdown
+    Dropdown,
+    ResourceModal
   },
   setup() {
     const {getProjectStatusBadge, getProjectTypes} = useProjects()
@@ -214,6 +217,10 @@ export default defineComponent({
     const selectedResources = ref<any[]>([])
     const availableResources = ref<any[]>([])
 
+    const isResourceModalVisible = ref(false)
+    const createResource = () => {
+      isResourceModalVisible.value = true
+    }
     onMounted( async () => {
       projectTypes.value = await getProjectTypes();
       availableResources.value = await getAll();
@@ -232,7 +239,9 @@ export default defineComponent({
       selectedProjectType,
       projectTypes,
       selectedResources,
-      availableResources
+      availableResources,
+      createResource,
+      isResourceModalVisible,
     }
   }
 })
