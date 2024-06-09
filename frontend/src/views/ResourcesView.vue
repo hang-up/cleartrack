@@ -9,7 +9,7 @@
       </div>
       <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <button
-          @click="router.push({ name: 'new-project' })"
+          @click="isResourceModalVisible = true"
           type="button"
           class="block rounded-md bg-slate-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
         >
@@ -24,24 +24,29 @@
         </div>
       </div>
     </div>
+    <ResourceModal
+      :visible="isResourceModalVisible"
+      @close="(e: boolean) => (isResourceModalVisible = e)"
+    ></ResourceModal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import ResourcesList from '@/components/resources/List.vue'
-import { useRouter } from 'vue-router'
+import ResourceModal from '@/components/resources/Modal.vue'
 
 export default defineComponent({
   name: 'ProjectsView',
   components: {
-    ResourcesList
+    ResourcesList,
+    ResourceModal
   },
   setup() {
-    const router = useRouter()
+    const isResourceModalVisible = ref(false)
 
     return {
-      router
+      isResourceModalVisible
     }
   }
 })
