@@ -134,7 +134,9 @@ export default {
             class: [
                 // Text
                 'leading-none',
-                'whitespace-nowrap'
+                'whitespace-nowrap',
+                'font-medium',
+                "text-sm"
             ]
         }
     },
