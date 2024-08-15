@@ -70,7 +70,8 @@ import {
   FolderPlusIcon,
   WrenchScrewdriverIcon,
   ChatBubbleLeftEllipsisIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  LinkIcon
 } from '@heroicons/vue/24/solid'
 
 const Sidebar = defineComponent({
@@ -96,6 +97,11 @@ const Sidebar = defineComponent({
         title: 'Stakeholders',
         icon: UserGroupIcon,
         link: '/stakeholders'
+      },
+      externalApi: {
+        title: 'External API',
+        icon: LinkIcon,
+        link: '/external-api'
       }
     })
     return {

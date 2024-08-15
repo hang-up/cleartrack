@@ -1,11 +1,12 @@
 <template>
   <main class="mx-auto w-full max-w-7xl px-6 pb-16 pt-10 sm:pb-24 lg:px-8">
     <div class="mx-auto mt-20 max-w-2xl text-center sm:mt-24">
-      <h1 class="mt-4 text-2xl tracking-tight text-gray-900 sm:text-5xl">Welcome back, Robert!</h1>
-      <p class="mt-4 text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8"></p>
+      <h1 class="mt-4 text-2xl tracking-tight text-gray-900 sm:text-5xl">Welcome back!</h1>
+      <p class="mt-4 text-base leading-7 text-gray-600 sm:mt-6 sm:text-lg sm:leading-8">
+        Here are some actions to get you started
+      </p>
     </div>
     <div class="mx-auto mt-16 flow-root max-w-lg sm:mt-20">
-      <h2 class="sr-only">Popular pages</h2>
       <ul role="list" class="-mt-6 divide-y divide-gray-900/5 border-b border-gray-900/5">
         <li v-for="(link, linkIdx) in links" :key="linkIdx" class="relative flex gap-x-6 py-6">
           <div
@@ -27,40 +28,32 @@
           </div>
         </li>
       </ul>
-      <div class="mt-10 flex justify-center">
-        <a href="#" class="text-sm font-semibold leading-6 text-indigo-600">
-          <span aria-hidden="true">&larr;</span>
-          Back to home
-        </a>
-      </div>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, h } from 'vue'
 import { ChevronRightIcon } from '@heroicons/vue/20/solid'
-import { BookmarkSquareIcon, BookOpenIcon, QueueListIcon, RssIcon } from '@heroicons/vue/24/solid'
+import { BookmarkSquareIcon, FolderPlusIcon, WrenchScrewdriverIcon } from '@heroicons/vue/24/solid'
 
 const links = [
   {
-    name: 'Documentation',
-    href: '#',
-    description: 'Learn how to integrate our tools with your app.',
-    icon: BookOpenIcon
+    name: 'New project',
+    href: '/#/projects/new',
+    description: 'Create a new project and start tracking your progress.',
+    icon: FolderPlusIcon
   },
   {
-    name: 'API Reference',
-    href: '#',
-    description: 'A complete API reference for our libraries.',
-    icon: QueueListIcon
+    name: 'Resources',
+    href: '/#/resources',
+    description: 'Create & manage resources for your projects.',
+    icon: WrenchScrewdriverIcon
   },
   {
-    name: 'Guides',
-    href: '#',
-    description: 'Installation guides that cover popular setups.',
+    name: 'Export your data',
+    href: '/#/data/export',
+    description: 'Export your data to CSV or Excel format.',
     icon: BookmarkSquareIcon
-  },
-  { name: 'Blog', href: '#', description: 'Read our latest news and articles.', icon: RssIcon }
+  }
 ]
 </script>
