@@ -274,6 +274,7 @@
     ></ResourceModal>
     <StakeHolderModal
       :visible="isStakeholderModalVisible"
+      :availableStakeholders="availableStakeholders"
       @close="(e: boolean) => (isStakeholderModalVisible = e)"
     ></StakeHolderModal>
   </div>

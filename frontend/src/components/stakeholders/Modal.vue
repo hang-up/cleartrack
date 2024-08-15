@@ -54,17 +54,20 @@ const Modal = defineComponent({
     onClose: {
       type: Function,
       default: () => {}
+    },
+    availableStakeholders: {
+      type: Array,
+      default: () => []
     }
   },
   setup(props, { emit }) {
     const isVisible = ref<boolean>(props.visible)
     const name = ref('')
     const role = ref('')
-    const roles = [
-      { name: 'Stakeholder Type 1', value: 'type 1' },
-      { name: 'Stakeholder Type 2', value: 'type 2' },
-      { name: 'Stakeholder Type 3', value: 'type 3' }
-    ]
+    const roles = props.availableStakeholders.map((stakeholder: any) => ({
+      name: stakeholder.stakeholder_type,
+      value: stakeholder.stakeholder_type
+    }))
 
     watch(
       () => props.visible,
