@@ -219,6 +219,43 @@
             </div>
           </div>
         </div>
+
+        <div
+          class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3"
+        >
+          <div>
+            <h2 class="text-base font-semibold leading-7 text-gray-900">Project stakeholders</h2>
+            <p class="mt-1 text-sm leading-6 text-gray-600">Add stakeholders to your project</p>
+          </div>
+
+          <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+            <div class="sm:col-span-6">
+              <label class="block text-sm font-medium leading-6 text-gray-900"
+                >Project stakeholders</label
+              >
+              <div class="mt-2">
+                <div class="flex justify-between">
+                  <MultiSelect
+                    class="w-10/12"
+                    v-model="selectedStakeholders"
+                    :options="availableStakeholders"
+                    filter
+                    optionLabel="name"
+                    display="chip"
+                    placeholder="Select Stakeholders"
+                  />
+                  <button
+                    type="button"
+                    class="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+                    @click="createStakeholder"
+                  >
+                    Create new
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="mt-6 flex items-center justify-end gap-x-6">
@@ -235,6 +272,10 @@
       :visible="isResourceModalVisible"
       @close="(e: boolean) => (isResourceModalVisible = e)"
     ></ResourceModal>
+    <StakeHolderModal
+      :visible="isStakeholderModalVisible"
+      @close="(e: boolean) => (isStakeholderModalVisible = e)"
+    ></StakeHolderModal>
   </div>
 </template>
 
@@ -248,10 +289,12 @@ import Dropdown from 'primevue/dropdown'
 import MultiSelect from 'primevue/multiselect'
 import CommonBadge from '@/components/common/Badge.vue'
 import ResourceModal from '@/components/resources/Modal.vue'
+import StakeHolderModal from '@/components/stakeholders/Modal.vue'
 
 import { ProjectStatus } from '@/types/project-status'
 import { useProjects } from '@/composables/use-projects'
 import { useResources } from '@/composables/use-resources'
+import { useStakeholders } from '@/composables/use-stakeholders'
 
 export default defineComponent({
   name: 'NewProjectForm',
@@ -264,18 +307,20 @@ export default defineComponent({
     TextArea,
     Calendar,
     Dropdown,
-    ResourceModal
+    ResourceModal,
+    StakeHolderModal
   },
   setup() {
     const { getProjectStatusBadge, getProjectTypes } = useProjects()
     const { getAll } = useResources()
+    const { getAll: getAllStakeholders } = useStakeholders()
 
     const name = ref('')
     const description = ref('')
-    const startDate = ref('')
-    const endDate = ref('')
-    const committeePresentationDate = ref('')
-    const publicationDate = ref('')
+    const startDate = ref(null)
+    const endDate = ref(null)
+    const committeePresentationDate = ref(null)
+    const publicationDate = ref(null)
 
     const projectTypes = ref<any[]>([])
     const selectedProjectType = ref(undefined)
@@ -285,16 +330,26 @@ export default defineComponent({
     )
     const selectedProjectStatus = ref(undefined)
 
+    // Resources
     const selectedResources = ref<any[]>([])
     const availableResources = ref<any[]>([])
-
     const isResourceModalVisible = ref(false)
     const createResource = () => {
       isResourceModalVisible.value = true
     }
+
+    // Stakeholders
+    const selectedStakeholders = ref<any[]>([])
+    const availableStakeholders = ref<any[]>([])
+    const isStakeholderModalVisible = ref(false)
+    const createStakeholder = () => {
+      isStakeholderModalVisible.value = true
+    }
+
     onMounted(async () => {
       projectTypes.value = await getProjectTypes()
       availableResources.value = await getAll()
+      availableStakeholders.value = await getAllStakeholders()
     })
 
     return {
@@ -312,7 +367,11 @@ export default defineComponent({
       selectedResources,
       availableResources,
       createResource,
-      isResourceModalVisible
+      isResourceModalVisible,
+      selectedStakeholders,
+      availableStakeholders,
+      createStakeholder,
+      isStakeholderModalVisible
     }
   }
 })

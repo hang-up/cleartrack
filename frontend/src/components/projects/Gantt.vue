@@ -1,11 +1,7 @@
 <template>
   <div class="">
     <div class="flex mb-2 justify-end">
-      <ButtonGroup class="text-sm">
-        <PButton @click="changeViewMode('day')" icon="pi pi-sun" label="Day View" />
-        <PButton @click="changeViewMode('week')" icon="pi pi-calendar-times" label="Week View" />
-        <PButton @click="changeViewMode('month')" icon="pi pi-calendar-plus" label="Month View" />
-      </ButtonGroup>
+      <SelectButton v-model="mode" :options="modes" aria-labelledby="basic" />
     </div>
 
     <div class="overflow-hidden">
@@ -14,7 +10,7 @@
         :tasks="tasks"
         @task-updated="debugEventLog.push($event)"
         @task-date-updated="debugEventLog.push($event)"
-        @task-progress-change="debugEventLog.push($event)"
+        @task-progress-updated="debugEventLog.push($event)"
         v-if="tasks.length"
       />
       <i class="pi pi-spinner animate-spin !block text-center my-0 mx-auto" v-else></i>
@@ -31,8 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import PButton from 'primevue/button'
-import ButtonGroup from 'primevue/buttongroup'
+import SelectButton from 'primevue/selectbutton'
 
 import FrappeGantt from '@/components/common/Gantt.vue'
 
@@ -40,11 +35,11 @@ const BetterGantt = defineComponent({
   name: 'BetterGantt',
   components: {
     FrappeGantt,
-    PButton,
-    ButtonGroup
+    SelectButton
   },
   setup() {
     const mode = ref('week')
+    const modes = ref(['day', 'week', 'month', 'quarter', 'year', 'fiscal_year'])
     const tasks = ref<any>([])
     const debugEventLog = ref<any>([])
 
@@ -63,7 +58,7 @@ const BetterGantt = defineComponent({
               id: '2',
               name: 'World',
               start: '2019-01-05',
-              end: '2019-01-10',
+              end: '2019-03-10',
               progress: 20,
               dependencies: '1'
             },
@@ -71,7 +66,7 @@ const BetterGantt = defineComponent({
               id: '3',
               name: 'From',
               start: '2019-01-10',
-              end: '2019-01-15',
+              end: '2019-04-15',
               progress: 30,
               dependencies: '2'
             },
@@ -79,7 +74,7 @@ const BetterGantt = defineComponent({
               id: '4',
               name: 'Lloyd',
               start: '2019-01-15',
-              end: '2019-01-20',
+              end: '2019-02-28',
               progress: 40,
               dependencies: '3'
             }
@@ -102,20 +97,16 @@ const BetterGantt = defineComponent({
       ]
     }
 
-    const changeViewMode = (viewMode: string) => {
-      mode.value = viewMode
-    }
-
     onMounted(async () => {
       await fetchTasks()
     })
 
     return {
       mode,
+      modes,
       tasks,
       debugEventLog,
-      addRandomTask,
-      changeViewMode
+      addRandomTask
     }
   }
 })
