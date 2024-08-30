@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import Gantt from 'frappe-gantt'
+import Gantt from './RobGantt.iife'
 
 export default {
   name: 'CommonGantt',
