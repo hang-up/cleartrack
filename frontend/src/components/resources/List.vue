@@ -32,7 +32,7 @@
           {{ format(resource.created_at, 'MMMM d, yyyy, h:mm a') }}
         </td>
         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-          {{ format(resource.updated_at, 'MMMM d, yyyy, h:mm a') || 'N/A' }}
+          {{ resource.updated ? format(resource.updated_at, 'MMMM d, yyyy, h:mm a') : 'N/A' }}
         </td>
         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
           <Tag :value="getTagConfig(resource.status).label" :severity="getTagConfig(resource.status).severity" />
