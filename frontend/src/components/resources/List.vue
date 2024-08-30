@@ -2,7 +2,10 @@
   <table class="min-w-full divide-y divide-gray-300">
     <thead>
       <tr>
-        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+        <th
+          scope="col"
+          class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+        >
           Name
         </th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
@@ -35,12 +38,18 @@
           {{ resource.updated ? format(resource.updated_at, 'MMMM d, yyyy, h:mm a') : 'N/A' }}
         </td>
         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-          <Tag :value="getTagConfig(resource.status).label" :severity="getTagConfig(resource.status).severity" />
+          <Tag
+            :value="getTagConfig(resource.status).label"
+            :severity="getTagConfig(resource.status).severity"
+          />
         </td>
 
-        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-          <a href="#" class="text-slate-600 hover:text-slate-900">Edit<span class="sr-only">, {{ resource.name
-              }}</span></a>
+        <td
+          class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
+        >
+          <a href="#" class="text-slate-600 hover:text-slate-900"
+            >Edit<span class="sr-only">, {{ resource.name }}</span></a
+          >
         </td>
       </tr>
     </tbody>

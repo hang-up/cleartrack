@@ -1,14 +1,27 @@
 <template>
-  <PDialog v-model:visible="isVisible" modal header="Create Stakeholder" :style="{ width: '25rem' }" :closable="false">
-    <span class="text-surface-600 dark:text-surface-0/70 block mb-5 p-text-secondary text-sm">A stakeholder is an entity
-      who has an interest in the success of a project.</span>
+  <PDialog
+    v-model:visible="isVisible"
+    modal
+    header="Create Stakeholder"
+    :style="{ width: '25rem' }"
+    :closable="false"
+  >
+    <span class="text-surface-600 dark:text-surface-0/70 block mb-5 p-text-secondary text-sm"
+      >A stakeholder is an entity who has an interest in the success of a project.</span
+    >
     <div class="flex items-center gap-3 mb-3">
       <label for="name" class="font-semibold w-[6rem]">Name</label>
       <InputText id="name" class="flex-auto" autocomplete="off" v-model="name" />
     </div>
     <div class="flex items-center gap-3 mb-5">
       <label for="role" class="font-semibold w-[6rem]">Type</label>
-      <Dropdown v-model="role" :options="roles" optionLabel="name" placeholder="Select a type" class="flex-auto" />
+      <Dropdown
+        v-model="role"
+        :options="roles"
+        optionLabel="name"
+        placeholder="Select a type"
+        class="flex-auto"
+      />
     </div>
     <div class="flex justify-end gap-2">
       <PButton type="button" label="Cancel" severity="secondary" @click="handleClose"></PButton>
@@ -41,7 +54,7 @@ const Modal = defineComponent({
     },
     onClose: {
       type: Function,
-      default: () => { }
+      default: () => {}
     },
     availableStakeholders: {
       type: Array,

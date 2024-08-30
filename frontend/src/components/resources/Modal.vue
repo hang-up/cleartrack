@@ -1,5 +1,11 @@
 <template>
-  <PDialog v-model:visible="isVisible" modal header="Create Resource" :style="{ width: '25rem' }" :closable="false">
+  <PDialog
+    v-model:visible="isVisible"
+    modal
+    header="Create Resource"
+    :style="{ width: '25rem' }"
+    :closable="false"
+  >
     <span class="text-surface-600 dark:text-surface-0/70 block mb-5">A resource is xxxx</span>
     <div class="flex items-center gap-3 mb-3">
       <label for="name" class="font-semibold w-[6rem]">Name</label>
@@ -38,7 +44,7 @@ const Modal = defineComponent({
     },
     onClose: {
       type: Function,
-      default: () => { }
+      default: () => {}
     }
   },
   setup(props, { emit }) {
