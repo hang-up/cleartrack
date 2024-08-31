@@ -1,29 +1,29 @@
 <template>
   <div>
     <DataTable :value="refProjects" ref="dt" resizableColumns removableSort :reorderableColumns="true" stripedRows
-      columnResizeMode="expand" showGridlines tableStyle="min-width: 50rem" :exportFunction="beforeExportFunction">
+      columnResizeMode="expand" showGridlines tableStyle="min-width: 50rem" scrollable
+      :exportFunction="beforeExportFunction">
       <template #header>
         <Toolbar>
           <template #start>
             <PButton v-tooltip="'Print'" icon="pi pi-print" class="mr-2" severity="secondary" @click="print" />
-          </template>
-
-          <template #center>
             <IconField iconPosition="left">
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
               <InputText placeholder="Search" />
             </IconField>
-          </template>
-
-          <template #end>
             <PButton class="" icon="pi pi-external-link" label="Export to CSV" @click="handleExport" />
           </template>
+
+          <template #center> </template>
+
+          <template #end> </template>
         </Toolbar>
       </template>
+
       <Column v-for="column in columns" :key="column.field" :field="column.field" :header="column.header" sortable
-        :exportHeader="column.header" :exportable="true" :headerStyle="column.headerStyle">
+        :exportHeader="column.header" :exportable="true" :style="column.style">
         <template #body="slotProps">
           <template v-if="column.field === 'created_at'">
             {{ format(slotProps.data.created_at, 'MMMM d, yyyy, h:mm a') }}
@@ -60,14 +60,14 @@
               :value="resource.resources.name" severity="info" v-tooltip="`${resource.resources.role}
             Is Active?: ${resource.resources.status}
             Created At: ${format(resource.resources.created_at, 'MMMM d, yyyy, h:mm a')}`
-                " class="m-2 cursor-default"></Tag>
+                " class="m-1 cursor-default"></Tag>
           </template>
           <template v-else-if="column.field === 'project_stakeholder'">
             <Tag v-for="stakeholder in slotProps.data.project_stakeholder" :key="stakeholder.stakeholders.id"
               :value="stakeholder.stakeholders.name" severity="info" v-tooltip="`${stakeholder.stakeholders.name}
             Type: ${stakeholder.stakeholders.stakeholder_type}
             Created At: ${format(stakeholder.stakeholders.created_at, 'MMMM d, yyyy, h:mm a')}`
-                " class="m-2 cursor-default"></Tag>
+                " class="m-1 cursor-default"></Tag>
           </template>
           <template v-else-if="column.field === 'project_types'">
             <CommonBadge severity="gray" :text="slotProps.data.project_types.name"></CommonBadge>
@@ -138,14 +138,14 @@ const Table = defineComponent({
       return data
     }
     const print = () => {
-      dt.value.print()
+      window.print()
     }
     const columns = computed(() => {
       return Object.keys(refProjects.value[0] as any).map((key) => {
         return {
           field: key,
           header: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/_/g, ' '),
-          headerStyle: key === 'description' ? 'width: 450px' : ''
+          style: ['recommendations', 'description'].includes(key) ? 'min-width: 450px' : ''
         }
       })
     })
