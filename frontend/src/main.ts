@@ -4,6 +4,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
+import Tooltip from 'primevue/tooltip'
 
 import BaseAuraPreset from '@/assets/styles/base-aura-preset'
 import 'frappe-gantt/dist/frappe-gantt.min.css'
@@ -20,6 +21,7 @@ app
     unstyled: true,
     pt: BaseAuraPreset
   })
+  .directive('tooltip', Tooltip)
   .use(ToastService)
   .use(router)
   .mount('#app')

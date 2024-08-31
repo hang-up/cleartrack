@@ -53,6 +53,11 @@ const router = createRouter({
           component: () => import('../views/ResourcesView.vue')
         }
       ]
+    },
+    {
+      path: '/custom-reports',
+      name: 'custom-reports',
+      component: () => import('../views/CustomReportsView.vue')
     }
   ]
 })

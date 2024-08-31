@@ -104,7 +104,7 @@ export default {
   column: {
     headercell: ({ context, props }) => ({
       class: [
-        'font-semibold',
+        'font-bold',
         'leading-[normal]',
 
         // Position
@@ -149,6 +149,9 @@ export default {
         }
       ]
     }),
+    headertitle: {
+      class: 'font-bold'
+    },
     headercontent: {
       class: 'flex items-center'
     },

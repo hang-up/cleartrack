@@ -2,6 +2,20 @@ import { ProjectStatus } from '@/types/project-status'
 import { useSupabase } from '@/composables/use-supabase'
 
 const useProjects = () => {
+  const getProjects = async () => {
+    const supabase = useSupabase()
+
+    const { data, error } = await supabase
+      .from('projects')
+      .select(
+        '*,project_resource(resources(*)),project_stakeholder(stakeholders(*)),project_types(*),recommendations(*)'
+      )
+    if (error) {
+      throw new Error(error.message)
+    }
+    return data
+  }
+
   const getProjectStatusBadge = (status: ProjectStatus) => {
     const statusColorMap = {
       [ProjectStatus.planned]: 'info',
@@ -14,8 +28,22 @@ const useProjects = () => {
       [ProjectStatus.pending_approval]: 'warning',
       [ProjectStatus.not_started]: 'gray'
     }
-
     return statusColorMap[status]
+  }
+
+  const getProjectStatusLabel = (status: ProjectStatus) => {
+    const statusLabelMap = {
+      [ProjectStatus.planned]: 'Planned',
+      [ProjectStatus.active]: 'Active',
+      [ProjectStatus.on_hold]: 'On Hold',
+      [ProjectStatus.delayed]: 'Delayed',
+      [ProjectStatus.completed]: 'Completed',
+      [ProjectStatus.cancelled]: 'Cancelled',
+      [ProjectStatus.in_review]: 'In Review',
+      [ProjectStatus.pending_approval]: 'Pending Approval',
+      [ProjectStatus.not_started]: 'Not Started'
+    }
+    return statusLabelMap[status]
   }
 
   const getProjectTypes = async () => {
@@ -27,7 +55,7 @@ const useProjects = () => {
     return data.sort((a: any, b: any) => a.name.localeCompare(b.name))
   }
 
-  return { getProjectStatusBadge, getProjectTypes }
+  return { getProjectStatusBadge, getProjectStatusLabel, getProjectTypes, getProjects }
 }
 
 export { useProjects }
