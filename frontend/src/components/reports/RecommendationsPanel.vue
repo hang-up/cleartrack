@@ -1,5 +1,5 @@
 <template>
-  <Accordion>
+  <Accordion :multiple="true" :active-index="activeIndexes">
     <AccordionTab
       v-for="recommendation in recommendations"
       :key="recommendation.id"
@@ -45,7 +45,7 @@
       </p>
       <Divider />
       <p class="m-1">
-        <Tag value="EN" severity="secondary" class="mr-2" /> {{ recommendation.recommendation_FR }}
+        <Tag value="FR" severity="secondary" class="mr-2" /> {{ recommendation.recommendation_FR }}
       </p>
       <Divider v-if="recommendation.additional_text" />
       <p class="m-1" v-if="recommendation.additional_text">
@@ -96,9 +96,11 @@ const RecommendationsPanel = defineComponent({
     Tag,
     Divider
   },
-  setup() {
+  setup(props) {
+    const activeIndexes = props.recommendations.map((_, index) => index)
     return {
-      format
+      format,
+      activeIndexes
     }
   }
 })
@@ -106,7 +108,7 @@ const RecommendationsPanel = defineComponent({
 export default RecommendationsPanel
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .meta {
   font-size: 12px;
 

@@ -13,7 +13,17 @@ const useProjects = () => {
     if (error) {
       throw new Error(error.message)
     }
-    return data
+    // Go through every project and instantiate a date object for anything that has to do with a date
+    return data.map((project: any) => {
+      project.committee_presentation_date = new Date(project.committee_presentation_date)
+      project.publication_date = new Date(project.publication_date)
+      project.created_at = new Date(project.created_at)
+      project.updated_at = new Date(project.updated_at)
+      project.start_date = new Date(project.start_date)
+      project.end_date = new Date(project.end_date)
+      project.updated_at = new Date(project.updated_at)
+      return project
+    })
   }
 
   const getProjectStatusBadge = (status: ProjectStatus) => {

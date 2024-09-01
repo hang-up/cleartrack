@@ -12,7 +12,13 @@
       tableStyle="min-width: 50rem"
       scrollable
       :exportFunction="beforeExportFunction"
+      v-model:filters="filters"
+      paginator
+      filter-display="menu"
+      :rows="10"
     >
+      <template #empty> No projects found. </template>
+
       <template #header>
         <Toolbar>
           <template #start>
@@ -88,7 +94,11 @@
         :exportHeader="column.header"
         :exportable="true"
         :style="column.style"
+        :showFilterMatchModes="!['status'].includes(column.field ?? '')"
+        :filter-field="column.filterField"
+        :data-type="column.dataType"
       >
+        <!-- Content -->
         <template #body="slotProps">
           <template v-if="column.field === 'created_at'">
             {{ format(slotProps.data.created_at, 'MMMM d, yyyy, h:mm a') }}
@@ -166,13 +176,63 @@
             {{ column.field ? slotProps.data[column.field] : '' }}
           </template>
         </template>
+
+        <!-- Filters -->
+        <template
+          #filter="{ filterModel, filterCallback }"
+          v-if="
+            ![
+              'project_resource',
+              'project_stakeholder',
+              'project_types',
+              'recommendations'
+            ].includes(column.field ?? '')
+          "
+        >
+          <template
+            v-if="
+              [
+                'created_at',
+                'updated_at',
+                'start_date',
+                'end_date',
+                'committee_presentation_date',
+                'publication_date'
+              ].includes(column.field ?? '')
+            "
+          >
+            <Calendar
+              v-model="filterModel.value"
+              dateFormat="mm/dd/yy"
+              placeholder="mm/dd/yyyy"
+              mask="99/99/9999"
+            />
+          </template>
+          <template v-if="column.field === 'status'">
+            <MultiSelect
+              v-model="filterModel.value"
+              @change="filterCallback()"
+              :options="Object.keys(statusLabelMap)"
+              placeholder="Any"
+              class="p-column-filter"
+              style="max-width: 200px"
+            >
+              <template #option="slotProps">
+                <CommonBadge
+                  :text="getProjectStatusLabel(slotProps.option)"
+                  :severity="getProjectStatusBadge(slotProps.option)"
+                />
+              </template>
+            </MultiSelect>
+          </template>
+        </template>
       </Column>
     </DataTable>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, computed } from 'vue'
+import { ref, defineComponent } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import PButton from 'primevue/button'
@@ -182,15 +242,22 @@ import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
 import MultiSelect from 'primevue/multiselect'
 import Tag from 'primevue/tag'
+import Calendar from 'primevue/calendar'
 import { format, differenceInDays } from 'date-fns'
 import { useProjects } from '@/composables/use-projects'
 import CommonBadge from '@/components/common/Badge.vue'
 import RecommendationsPanel from './RecommendationsPanel.vue'
+import { FilterMatchMode, FilterOperator } from 'primevue/api'
+import { statusLabelMap } from '@/types/project-status'
+import { projectTypeLabelMap } from '@/types/project-types'
+import { useDate } from '@/composables/use-date'
 
 type ColumnType = {
   field?: string
   header?: string
   style?: string
+  filterField?: string
+  dataType?: string
 }
 
 const Table = defineComponent({
@@ -198,6 +265,7 @@ const Table = defineComponent({
   components: {
     CommonBadge,
     DataTable,
+    Calendar,
     Column,
     PButton,
     Toolbar,
@@ -216,7 +284,9 @@ const Table = defineComponent({
   },
   setup(props) {
     const { getProjectStatusBadge, getProjectStatusLabel } = useProjects()
+    const { formatDate } = useDate()
 
+    // Exports + Print
     const dt = ref()
     const refProjects = ref(props.projects)
     const handleExport = () => {
@@ -235,6 +305,8 @@ const Table = defineComponent({
     const print = () => {
       window.print()
     }
+
+    // Columns
     const columns = ref<ColumnType[]>([])
     columns.value = Object.keys(refProjects.value[0] as any)
       .map((key) => {
@@ -244,16 +316,71 @@ const Table = defineComponent({
         return {
           field: key,
           header: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/_/g, ' '),
-          style: ['recommendations'].includes(key) ? 'min-width: 450px' : 'min-width: 200px'
+          style: ['recommendations'].includes(key) ? 'min-width: 450px' : 'min-width: 200px',
+          filterField: [
+            'created_at',
+            'updated_at',
+            'start_date',
+            'end_date',
+            'committee_presentation_date',
+            'publication_date'
+          ].includes(key)
+            ? key
+            : undefined,
+          dataType: [
+            'created_at',
+            'updated_at',
+            'start_date',
+            'end_date',
+            'committee_presentation_date',
+            'publication_date'
+          ].includes(key)
+            ? 'date'
+            : undefined
         }
       })
       .filter((col) => Object.keys(col).length)
 
+    // Filters
     const selectedColumns = ref(columns.value)
     const onSelectedColumnsToggle = (val: any) => {
-      console.log({ columns: columns.value, val })
       selectedColumns.value = columns.value.filter((col) => val.includes(col))
     }
+    const filters = ref({
+      // The following fields are object and needs a custom filter to be applied.
+      // TODO: Implement custom filters for these fields via FilterService.
+      // project_resource: { value: null, matchMode: FilterMatchMode.IN },
+      // project_stakeholder: { value: null, matchMode: FilterMatchMode.IN },
+      // project_types: { value: null, matchMode: FilterMatchMode.IN },
+      // project_status: { value: null, matchMode: FilterMatchMode.IN },
+      status: { value: null, matchMode: FilterMatchMode.IN },
+      created_at: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+      },
+      updated_at: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+      },
+      start_date: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+      },
+      end_date: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+      },
+      committee_presentation_date: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+      },
+      publication_date: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }]
+      }
+    })
+
+    // Misc.
     const getDaysDifference = (date: Date) => {
       const diff = differenceInDays(new Date(), date)
       const res = {
@@ -287,7 +414,11 @@ const Table = defineComponent({
       getProjectStatusLabel,
       handleExport,
       selectedColumns,
-      onSelectedColumnsToggle
+      onSelectedColumnsToggle,
+      statusLabelMap,
+      projectTypeLabelMap,
+      filters,
+      formatDate
     }
   }
 })
