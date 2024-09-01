@@ -55,7 +55,12 @@ const useProjects = () => {
     return data.sort((a: any, b: any) => a.name.localeCompare(b.name))
   }
 
-  return { getProjectStatusBadge, getProjectStatusLabel, getProjectTypes, getProjects }
+  return {
+    getProjectStatusBadge,
+    getProjectStatusLabel,
+    getProjectTypes,
+    getProjects
+  }
 }
 
 export { useProjects }
