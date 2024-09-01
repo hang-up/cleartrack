@@ -1,19 +1,55 @@
 <template>
   <div>
-    <DataTable :value="refProjects" ref="dt" resizableColumns removableSort :reorderableColumns="true" stripedRows
-      columnResizeMode="expand" showGridlines tableStyle="min-width: 50rem" scrollable
-      :exportFunction="beforeExportFunction">
+    <DataTable
+      :value="refProjects"
+      ref="dt"
+      resizableColumns
+      removableSort
+      :reorderableColumns="true"
+      stripedRows
+      columnResizeMode="expand"
+      showGridlines
+      tableStyle="min-width: 50rem"
+      scrollable
+      :exportFunction="beforeExportFunction"
+    >
       <template #header>
         <Toolbar>
           <template #start>
-            <PButton v-tooltip="'Print'" icon="pi pi-print" class="mr-2" severity="secondary" @click="print" />
-            <IconField iconPosition="left">
-              <InputIcon>
-                <i class="pi pi-search" />
-              </InputIcon>
-              <InputText placeholder="Search" />
-            </IconField>
-            <PButton class="" icon="pi pi-external-link" label="Export to CSV" @click="handleExport" />
+            <div class="flex flex-row items-end gap-2">
+              <PButton
+                v-tooltip="'Print'"
+                icon="pi pi-print"
+                class="mr-2"
+                severity="secondary"
+                @click="print"
+              />
+              <IconField iconPosition="left" class="mr-2">
+                <InputIcon>
+                  <i class="pi pi-search" />
+                </InputIcon>
+                <InputText placeholder="Search" />
+              </IconField>
+              <div class="flex flex-col">
+                <label for="ms-columns" style="font-size: 10px"> Additional Columns</label>
+                <MultiSelect
+                  id="ms-columns"
+                  :modelValue="selectedColumns"
+                  :options="columns"
+                  optionLabel="header"
+                  @update:modelValue="onSelectedColumnsToggle"
+                  display="chip"
+                  placeholder="Select Columns"
+                  class="mr-2 max-w-lg"
+                />
+              </div>
+              <PButton
+                class=""
+                icon="pi pi-external-link"
+                label="Export to CSV"
+                @click="handleExport"
+              />
+            </div>
           </template>
 
           <template #center> </template>
@@ -21,9 +57,38 @@
           <template #end> </template>
         </Toolbar>
       </template>
+      <Column
+        field="id"
+        header="ID"
+        :exportable="true"
+        :style="{ 'min-width': '200px' }"
+        sortable
+      />
+      <Column
+        field="name"
+        header="Name"
+        :exportable="true"
+        :style="{ 'min-width': '200px' }"
+        sortable
+      />
+      <Column
+        field="description"
+        header="Description"
+        :exportable="true"
+        :style="{ 'min-width': '400px' }"
+        sortable
+      />
 
-      <Column v-for="column in columns" :key="column.field" :field="column.field" :header="column.header" sortable
-        :exportHeader="column.header" :exportable="true" :style="column.style">
+      <Column
+        v-for="column in selectedColumns"
+        :key="column.field"
+        :field="column.field"
+        :header="column.header"
+        sortable
+        :exportHeader="column.header"
+        :exportable="true"
+        :style="column.style"
+      >
         <template #body="slotProps">
           <template v-if="column.field === 'created_at'">
             {{ format(slotProps.data.created_at, 'MMMM d, yyyy, h:mm a') }}
@@ -42,32 +107,54 @@
             {{ format(slotProps.data.end_date, 'MMMM d, yyyy, h:mm a') }}
           </template>
           <template v-else-if="column.field === 'committee_presentation_date'">
-            {{ format(slotProps.data.committee_presentation_date, 'MMMM d, yyyy, h:mm a') }}
-            <Tag :value="getDaysDifference(slotProps.data.committee_presentation_date).label"
-              :severity="getDaysDifference(slotProps.data.committee_presentation_date).severity" class="mt-4" />
+            {{ format(slotProps.data.committee_presentation_date, 'MMMM d, yyyy, h:mm a') }} <br />
+            <Tag
+              :value="getDaysDifference(slotProps.data.committee_presentation_date).label"
+              :severity="getDaysDifference(slotProps.data.committee_presentation_date).severity"
+              class="mt-4"
+            />
           </template>
           <template v-else-if="column.field === 'publication_date'">
-            {{ format(slotProps.data.publication_date, 'MMMM d, yyyy, h:mm a') }}
-            <Tag :value="getDaysDifference(slotProps.data.publication_date).label"
-              :severity="getDaysDifference(slotProps.data.publication_date).severity" class="mt-4" />
+            {{ format(slotProps.data.publication_date, 'MMMM d, yyyy, h:mm a') }} <br />
+            <Tag
+              :value="getDaysDifference(slotProps.data.publication_date).label"
+              :severity="getDaysDifference(slotProps.data.publication_date).severity"
+              class="mt-4"
+            />
           </template>
           <template v-else-if="column.field === 'status'">
-            <CommonBadge :text="getProjectStatusLabel(slotProps.data.status)"
-              :severity="getProjectStatusBadge(slotProps.data.status)" />
+            <CommonBadge
+              :text="getProjectStatusLabel(slotProps.data.status)"
+              :severity="getProjectStatusBadge(slotProps.data.status)"
+            />
           </template>
           <template v-else-if="column.field === 'project_resource'">
-            <Tag v-for="resource in slotProps.data.project_resource" :key="resource.resources.id"
-              :value="resource.resources.name" severity="info" v-tooltip="`${resource.resources.role}
+            <Tag
+              v-for="resource in slotProps.data.project_resource"
+              :key="resource.resources.id"
+              :value="resource.resources.name"
+              severity="info"
+              v-tooltip="
+                `${resource.resources.role}
             Is Active?: ${resource.resources.status}
             Created At: ${format(resource.resources.created_at, 'MMMM d, yyyy, h:mm a')}`
-                " class="m-1 cursor-default"></Tag>
+              "
+              class="m-1 cursor-default"
+            ></Tag>
           </template>
           <template v-else-if="column.field === 'project_stakeholder'">
-            <Tag v-for="stakeholder in slotProps.data.project_stakeholder" :key="stakeholder.stakeholders.id"
-              :value="stakeholder.stakeholders.name" severity="info" v-tooltip="`${stakeholder.stakeholders.name}
+            <Tag
+              v-for="stakeholder in slotProps.data.project_stakeholder"
+              :key="stakeholder.stakeholders.id"
+              :value="stakeholder.stakeholders.name"
+              severity="info"
+              v-tooltip="
+                `${stakeholder.stakeholders.name}
             Type: ${stakeholder.stakeholders.stakeholder_type}
             Created At: ${format(stakeholder.stakeholders.created_at, 'MMMM d, yyyy, h:mm a')}`
-                " class="m-1 cursor-default"></Tag>
+              "
+              class="m-1 cursor-default"
+            ></Tag>
           </template>
           <template v-else-if="column.field === 'project_types'">
             <CommonBadge severity="gray" :text="slotProps.data.project_types.name"></CommonBadge>
@@ -76,7 +163,7 @@
             <RecommendationsPanel :recommendations="slotProps.data.recommendations" />
           </template>
           <template v-else>
-            {{ slotProps.data[column.field] }}
+            {{ column.field ? slotProps.data[column.field] : '' }}
           </template>
         </template>
       </Column>
@@ -93,11 +180,18 @@ import Toolbar from 'primevue/toolbar'
 import InputText from 'primevue/inputtext'
 import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
+import MultiSelect from 'primevue/multiselect'
 import Tag from 'primevue/tag'
 import { format, differenceInDays } from 'date-fns'
 import { useProjects } from '@/composables/use-projects'
 import CommonBadge from '@/components/common/Badge.vue'
 import RecommendationsPanel from './RecommendationsPanel.vue'
+
+type ColumnType = {
+  field?: string
+  header?: string
+  style?: string
+}
 
 const Table = defineComponent({
   name: 'CustomReportsTable',
@@ -111,6 +205,7 @@ const Table = defineComponent({
     IconField,
     InputIcon,
     Tag,
+    MultiSelect,
     RecommendationsPanel
   },
   props: {
@@ -140,15 +235,25 @@ const Table = defineComponent({
     const print = () => {
       window.print()
     }
-    const columns = computed(() => {
-      return Object.keys(refProjects.value[0] as any).map((key) => {
+    const columns = ref<ColumnType[]>([])
+    columns.value = Object.keys(refProjects.value[0] as any)
+      .map((key) => {
+        if (['id', 'name', 'description', 'project_type_id'].includes(key)) {
+          return {}
+        }
         return {
           field: key,
           header: (key.charAt(0).toUpperCase() + key.slice(1)).replace(/_/g, ' '),
-          style: ['recommendations', 'description'].includes(key) ? 'min-width: 450px' : ''
+          style: ['recommendations'].includes(key) ? 'min-width: 450px' : 'min-width: 200px'
         }
       })
-    })
+      .filter((col) => Object.keys(col).length)
+
+    const selectedColumns = ref(columns.value)
+    const onSelectedColumnsToggle = (val: any) => {
+      console.log({ columns: columns.value, val })
+      selectedColumns.value = columns.value.filter((col) => val.includes(col))
+    }
     const getDaysDifference = (date: Date) => {
       const diff = differenceInDays(new Date(), date)
       const res = {
@@ -180,7 +285,9 @@ const Table = defineComponent({
       getDaysDifference,
       getProjectStatusBadge,
       getProjectStatusLabel,
-      handleExport
+      handleExport,
+      selectedColumns,
+      onSelectedColumnsToggle
     }
   }
 })
