@@ -1,11 +1,20 @@
 <template>
   <Accordion>
-    <AccordionTab v-for="recommendation in recommendations" :key="recommendation.id" :header="recommendation.comments">
+    <AccordionTab
+      v-for="recommendation in recommendations"
+      :key="recommendation.id"
+      :header="recommendation.comments"
+    >
       <div class="meta">
         <ul>
           <li v-if="recommendation.link_to_rec_mrap">
-            <a class="text-blue-600 visited:text-purple-600" :href="recommendation.link_to_rec_mrap" target="_blank"
-              rel="noopener noreferrer">Link to REC MRAP</a>
+            <a
+              class="text-blue-600 visited:text-purple-600"
+              :href="recommendation.link_to_rec_mrap"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Link to REC MRAP</a
+            >
           </li>
           <li>Created on: {{ format(recommendation.created_at, 'MMMM d, yyyy, h:mm a') }}</li>
           <li v-if="recommendation.date_closed">
@@ -23,7 +32,7 @@
 
           <li>
             <Tag :value="`Status: ${recommendation.status}`" severity="contrast" class="m-1" />
-            <Tag :value="`Level: ${recommendation.level}`" severity="contrast" class="m-1" />
+            <Tag :value="`${recommendation.level}`" severity="contrast" class="m-1" />
           </li>
         </ul>
       </div>
